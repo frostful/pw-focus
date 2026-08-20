@@ -20,7 +20,7 @@
   <p>
     <a href="#installation"><strong>Install PW Focus</strong></a>
     ·
-    <a href="https://addons.mozilla.org/firefox/addon/REPLACE-WITH-PW-FOCUS-SLUG/">Firefox Add-ons</a>
+    <a href="https://addons.mozilla.org/firefox/">Firefox Add-ons</a>
     ·
     <a href="https://github.com/frostful/pw-focus/releases">Releases</a>
     ·
@@ -62,7 +62,7 @@ PW Focus contains no analytics, advertisements, remote code, or external service
 
 ### Firefox
 
-Firefox Add-ons listing: **[replace this placeholder after AMO approval](https://addons.mozilla.org/firefox/addon/REPLACE-WITH-PW-FOCUS-SLUG/)**.
+Firefox Add-ons listing: **[Pending]()**.
 
 For temporary testing from source:
 
