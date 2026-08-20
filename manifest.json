@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "PW Focus",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight, distraction-free layout for the PW study dashboard.",
   "minimum_chrome_version": "111",
   "permissions": ["storage"],

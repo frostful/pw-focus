@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const requiredFiles = [
+  "CHANGELOG.md",
   "LICENSE",
   "PRIVACY.md",
   "README.md",
@@ -16,12 +17,11 @@ const requiredFiles = [
   "popup.html",
   "popup.js"
 ];
-const iconFiles = ["assets/icon-16.png", "assets/icon-32.png", "assets/icon-48.png", "assets/icon-128.png", "assets/icon.svg"];
+const iconFiles = ["assets/icon-16.png", "assets/icon-32.png", "assets/icon-48.png", "assets/icon-128.png"];
 
 const files = new Map();
 for (const name of requiredFiles) files.set(name, await readFile(resolve(root, name), "utf8"));
 for (const name of iconFiles) await access(resolve(root, name));
-files.set("assets/icon.svg", await readFile(resolve(root, "assets/icon.svg"), "utf8"));
 await access(resolve(root, "scripts/check.mjs"));
 
 const manifest = JSON.parse(files.get("manifest.json"));
