@@ -7,10 +7,11 @@
 
   <h1>PW Focus</h1>
 
-  <p>A lightweight, distraction-free layout for the Physics Wallah study dashboard.</p>
+  <p>A lightweight, distraction-free PW study dashboard for Chrome and Firefox.</p>
 
   <p>
     <img src="https://img.shields.io/badge/Chrome-111%2B-4285F4?logo=googlechrome&logoColor=white" alt="Chrome 111 or newer">
+    <img src="https://img.shields.io/badge/Firefox-109%2B-FF7139?logo=firefoxbrowser&logoColor=white" alt="Firefox 109 or newer">
     <img src="https://img.shields.io/badge/Manifest-V3-8B7CF6" alt="Manifest V3">
     <img src="https://img.shields.io/badge/version-1.0.1-5B4BC4" alt="Version 1.0.1">
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2EA44F" alt="MIT License"></a>
@@ -18,6 +19,8 @@
 
   <p>
     <a href="#installation"><strong>Install PW Focus</strong></a>
+    ·
+    <a href="https://addons.mozilla.org/firefox/addon/REPLACE-WITH-PW-FOCUS-SLUG/">Firefox Add-ons</a>
     ·
     <a href="https://github.com/frostful/pw-focus/releases">Releases</a>
     ·
@@ -29,7 +32,7 @@
 
 ## About
 
-PW Focus simplifies the PW study area without blocking requests or modifying account data. It runs only on `https://www.pw.live/study-v2/*`, stores preferences in Chrome, and stays out of the way when Focus mode is disabled.
+PW Focus simplifies the PW study area without blocking requests or modifying account data. It runs only on `https://www.pw.live/study-v2/*`, stores preferences through the browser extension API, and stays out of the way when Focus mode is disabled.
 
 ### Features
 
@@ -48,30 +51,41 @@ PW Focus contains no analytics, advertisements, remote code, or external service
 
 ## Installation
 
-### From a release
+### Chrome
 
-1. Download the latest `pw-focus-v*.zip` from [Releases](https://github.com/frostful/pw-focus/releases/latest).
+1. Download the latest Chrome ZIP from [Releases](https://github.com/frostful/pw-focus/releases/latest).
 2. Extract the ZIP file.
 3. Open `chrome://extensions` in Chrome.
 4. Enable **Developer mode**.
 5. Select **Load unpacked** and choose the extracted folder.
 6. Refresh `https://www.pw.live/study-v2/study`.
 
-### From source
+### Firefox
+
+Firefox Add-ons listing: **[replace this placeholder after AMO approval](https://addons.mozilla.org/firefox/addon/REPLACE-WITH-PW-FOCUS-SLUG/)**.
+
+For temporary testing from source:
 
 ```sh
 git clone https://github.com/frostful/pw-focus.git
+cd pw-focus
+npm run build:firefox
 ```
 
-Then load the cloned folder through `chrome://extensions` using the same steps above.
+1. Open `about:debugging#/runtime/this-firefox`.
+2. Select **Load Temporary Add-on**.
+3. Choose `dist/firefox/manifest.json`.
+4. Refresh the PW study page.
 
-> PW Focus requires Chrome 111 or newer.
+Temporary add-ons disappear when Firefox closes. Normal installation requires a Mozilla-signed XPI from [addons.mozilla.org](https://addons.mozilla.org/) or Mozilla's unlisted signing flow.
+
+> PW Focus requires Chrome 111+ or Firefox 109+.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Usage
 
-Open PW Focus from the Chrome toolbar. Changes save automatically.
+Open PW Focus from the browser toolbar. Changes save automatically.
 
 - Select **Edit layout** to reveal drag handles on the PW page. Finish editing to hide them again.
 - Select **Hide an element**, then click a distraction on the page. Press `Escape` to cancel.
@@ -91,13 +105,15 @@ PW occasionally changes its page structure. If a saved element can no longer be 
 
 PW Focus does not collect browsing history, credentials, cookies, payment information, or usage analytics. Read the full [Privacy Policy](PRIVACY.md) and report vulnerabilities using [Security Policy](SECURITY.md).
 
+The Firefox manifest explicitly declares `data_collection_permissions.required: ["none"]` for Mozilla's built-in data-consent system.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Releases
 
-The latest packaged extension and release notes are available on the [GitHub Releases page](https://github.com/frostful/pw-focus/releases). See [CHANGELOG.md](CHANGELOG.md) for the complete version history.
+Packaged browser builds and release notes are available on the [GitHub Releases page](https://github.com/frostful/pw-focus/releases). See [CHANGELOG.md](CHANGELOG.md) for the complete version history.
 
-Current release: **v1.0.1** — refreshed project branding and open-source documentation.
+Current release: **v1.0.1** — refreshed branding, open-source documentation, and Firefox support.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -107,11 +123,13 @@ PW Focus uses plain JavaScript and CSS with no runtime or build dependencies.
 
 ```sh
 npm run check
+npm run build:chrome
+npm run build:firefox
 ```
 
-The release checker validates the manifest, JavaScript syntax, required assets, permissions, version alignment, and common accidental secrets or debug code.
+The release checker validates both manifests, JavaScript syntax, required assets, permissions, version alignment, cross-browser API usage, and common accidental secrets or debug code. Browser builds are written to `dist/chrome` and `dist/firefox`.
 
-After making changes, reload PW Focus from `chrome://extensions` and refresh the PW tab.
+After making changes, rebuild and reload PW Focus from `chrome://extensions` or `about:debugging`, then refresh the PW tab.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

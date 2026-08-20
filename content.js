@@ -1,6 +1,8 @@
 (() => {
   "use strict";
 
+  const extensionApi = globalThis.browser ?? globalThis.chrome;
+
   const DEFAULTS = {
     enabled: true,
     contentWidth: "focused",
@@ -97,7 +99,7 @@
 
   async function persistSettings(update) {
     try {
-      await chrome.storage.sync.set(update);
+      await extensionApi.storage.sync.set(update);
       return true;
     } catch {
       showToast("PW Focus could not save that change.");
@@ -582,7 +584,7 @@
     handle.focus();
   }, true);
 
-  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  extensionApi.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message?.type === "PWF_GET_STATE") {
       if (settings.enabled) {
         decoratePanels();
@@ -646,7 +648,7 @@
     }
   });
 
-  chrome.storage.onChanged.addListener((changes, area) => {
+  extensionApi.storage.onChanged.addListener((changes, area) => {
     if (area !== "sync") return;
     const nextSettings = { ...settings };
     for (const [key, change] of Object.entries(changes)) {
@@ -658,7 +660,7 @@
 
   async function initialize() {
     try {
-      const stored = await chrome.storage.sync.get(DEFAULTS);
+      const stored = await extensionApi.storage.sync.get(DEFAULTS);
       settings = normalizeSettings({ ...DEFAULTS, ...stored });
     } catch {
       settings = normalizeSettings(DEFAULTS);

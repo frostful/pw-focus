@@ -2,9 +2,11 @@
   "name": "pw-focus",
   "version": "1.0.1",
   "private": true,
-  "description": "Release checks for the PW Focus Chrome extension.",
+  "description": "Build and release checks for the PW Focus browser extension.",
   "license": "MIT",
   "scripts": {
+    "build:chrome": "node scripts/build.mjs chrome",
+    "build:firefox": "node scripts/build.mjs firefox",
     "check": "node scripts/check.mjs"
   }
 }

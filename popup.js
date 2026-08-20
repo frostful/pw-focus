@@ -1,3 +1,5 @@
+const extensionApi = globalThis.browser ?? globalThis.chrome;
+
 const DEFAULTS = {
   enabled: true,
   alwaysExpanded: true,
@@ -64,7 +66,7 @@ function on(id, event, handler) {
 }
 
 async function activePwTab() {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const [tab] = await extensionApi.tabs.query({ active: true, currentWindow: true });
   if (!tab?.id || !tab.url?.startsWith("https://www.pw.live/study-v2/")) return null;
   return tab;
 }
@@ -73,7 +75,7 @@ async function sendToPw(message) {
   const tab = await activePwTab();
   if (!tab) throw new Error("Open the PW study page first.");
   try {
-    return await chrome.tabs.sendMessage(tab.id, message);
+    return await extensionApi.tabs.sendMessage(tab.id, message);
   } catch {
     throw new Error("Reload the PW page once, then try again.");
   }
@@ -136,7 +138,7 @@ for (const [key, fallback] of Object.entries(DEFAULTS)) {
       document.getElementById(outputId).value = `${value}${suffix}`;
     }
     if (key === "enabled") editLayout.disabled = !value;
-    void safely(chrome.storage.sync.set({ [key]: value ?? fallback }), "Could not save that setting.");
+    void safely(extensionApi.storage.sync.set({ [key]: value ?? fallback }), "Could not save that setting.");
   });
 }
 
@@ -163,7 +165,7 @@ on("picker", "click", async () => {
 
 on("reset", "click", async () => {
   try {
-    await chrome.storage.sync.set({ hiddenSelectors: [], hiddenRules: [] });
+    await extensionApi.storage.sync.set({ hiddenSelectors: [], hiddenRules: [] });
     await sendToPw({ type: "PWF_RESET_HIDDEN" });
     setStatus("Manually hidden items restored.");
   } catch (error) {
@@ -173,7 +175,7 @@ on("reset", "click", async () => {
 
 on("resetOrder", "click", async () => {
   try {
-    await chrome.storage.sync.set({ sectionOrder: [], batchOrder: [] });
+    await extensionApi.storage.sync.set({ sectionOrder: [], batchOrder: [] });
     await sendToPw({ type: "PWF_RESET_ORDER" });
     setStatus("Dashboard order reset.");
   } catch (error) {
@@ -183,7 +185,7 @@ on("resetOrder", "click", async () => {
 
 on("emergency", "click", async () => {
   try {
-    await chrome.storage.sync.set({
+    await extensionApi.storage.sync.set({
       enabled: false,
       hiddenSelectors: [],
       hiddenRules: [],
@@ -213,7 +215,7 @@ function renderSettings(normalized) {
 
 async function initializeSettings() {
   try {
-    const stored = await chrome.storage.sync.get(DEFAULTS);
+    const stored = await extensionApi.storage.sync.get(DEFAULTS);
     const normalized = normalizeSettings(stored);
     renderSettings(normalized);
   } catch (error) {
