@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PW Focus</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <header>
+      <img class="mark" src="assets/icon-48.png" alt="">
+      <div>
+        <h1>PW Focus</h1>
+        <p>Keep the lesson. Lose the noise.</p>
+      </div>
+    </header>
+
+    <main>
+      <label class="setting primary">
+        <span><strong>Focus mode</strong><small>Apply your preferred dashboard</small></span>
+        <input id="enabled" type="checkbox">
+      </label>
+
+      <div class="group">
+        <label class="setting">
+          <span><strong>Always expanded</strong><small>Hide Show More/Less controls</small></span>
+          <input id="alwaysExpanded" type="checkbox">
+        </label>
+        <label class="setting stacked">
+          <span>Content width</span>
+          <select id="contentWidth">
+            <option value="focused">Focused</option>
+            <option value="wide">Wide</option>
+          </select>
+        </label>
+        <label class="setting stacked">
+          <span>Container style</span>
+          <select id="panelStyle">
+            <option value="glass">Liquid glass</option>
+            <option value="flat">Flat</option>
+          </select>
+        </label>
+        <label class="setting stacked">
+          <span>Corner radius <output id="panelRadiusOutput">18px</output></span>
+          <input id="panelRadius" type="range" min="0" max="32" step="2">
+        </label>
+        <label class="setting stacked">
+          <span>Container opacity <output id="panelOpacityOutput">92%</output></span>
+          <input id="panelOpacity" type="range" min="50" max="100" step="5">
+        </label>
+        <label class="setting stacked">
+          <span>Accent color</span>
+          <input id="accentColor" type="color">
+        </label>
+      </div>
+
+      <button id="editLayout" class="button primary-button">Edit layout</button>
+      <button id="picker" class="button quiet-button">Hide an element</button>
+
+      <details open>
+        <summary>Layout order</summary>
+        <div class="organizer">
+          <small>Drag these rows. Changes apply immediately and persist after refresh.</small>
+          <h2>Dashboard sections</h2>
+          <ul id="sectionsOrder" class="order-list"></ul>
+          <h2>Batch Offerings</h2>
+          <ul id="batchOrder" class="order-list"></ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Reset options</summary>
+        <button id="resetOrder" class="button quiet-button">Reset dashboard order</button>
+        <button id="reset" class="button quiet-button">Restore manually hidden items</button>
+        <button id="emergency" class="button danger-button">Emergency: show everything</button>
+      </details>
+
+      <p id="status" role="status" aria-live="polite"></p>
+    </main>
+
+    <footer>Layout handles only appear while editing.</footer>
+    <script src="popup.js"></script>
+  </body>
+</html>

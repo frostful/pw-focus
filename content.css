@@ -1,0 +1,196 @@
+:root {
+  --pwf-bg: #f7f7f5;
+  --pwf-surface: #ffffff;
+  --pwf-text: #202124;
+  --pwf-muted: #6b7280;
+  --pwf-border: #e5e7eb;
+  --pwf-accent: #5b4bc4;
+  --pwf-content-width: 1120px;
+  --pwf-panel-radius: 18px;
+  --pwf-panel-opacity: 92%;
+}
+
+html.pwf-enabled,
+html.pwf-enabled body {
+  background: var(--pwf-bg) !important;
+  color: var(--pwf-text) !important;
+}
+
+html.pwf-enabled body {
+  overflow-x: hidden !important;
+}
+
+html.pwf-enabled :is(main, [data-pwf-content-root="true"]) {
+  width: min(100% - 32px, var(--pwf-content-width)) !important;
+  max-width: var(--pwf-content-width) !important;
+  margin-inline: auto !important;
+  padding-bottom: 72px !important;
+}
+
+html.pwf-enabled[data-pwf-content-width="wide"] {
+  --pwf-content-width: 1440px;
+}
+
+html.pwf-enabled header {
+  background: color-mix(in srgb, var(--pwf-surface) 94%, transparent) !important;
+  border-bottom: 1px solid var(--pwf-border) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(12px);
+}
+
+html.pwf-enabled header :is(button, [role="button"]) {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+html.pwf-enabled header :is(button, [role="button"]):hover {
+  background-color: color-mix(in srgb, var(--pwf-accent) 18%, var(--pwf-surface)) !important;
+}
+
+html.pwf-enabled :is(section, article) {
+  scroll-margin-top: 88px;
+}
+
+html.pwf-enabled :is(button, a, input, select, textarea):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--pwf-accent) 38%, transparent) !important;
+  outline-offset: 2px !important;
+}
+
+html.pwf-enabled [data-pwf-hidden="true"] {
+  display: none !important;
+}
+
+html.pwf-enabled.pwf-always-expanded [data-pwf-expander="true"] {
+  display: none !important;
+}
+
+html.pwf-enabled [data-pwf-panel="true"] {
+  box-sizing: border-box !important;
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease !important;
+}
+
+html.pwf-enabled[data-pwf-panel-style="glass"] [data-pwf-panel="true"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 12% -12%, color-mix(in srgb, var(--pwf-accent) 24%, transparent), transparent 42%),
+    linear-gradient(125deg, rgba(255, 255, 255, 0.1), transparent 30%, transparent 68%, rgba(255, 255, 255, 0.025));
+}
+
+html.pwf-enabled[data-pwf-panel-style="glass"] [data-pwf-panel="true"] {
+  padding: 24px !important;
+  border: 1px solid color-mix(in srgb, var(--pwf-accent) 34%, rgba(255, 255, 255, 0.18)) !important;
+  border-radius: var(--pwf-panel-radius) !important;
+  background-color: color-mix(in srgb, var(--pwf-surface) var(--pwf-panel-opacity), transparent) !important;
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.02) 44%, transparent 72%) !important;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.14), inset 0 -1px rgba(255, 255, 255, 0.025), 0 22px 58px rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(26px) saturate(145%) !important;
+}
+
+html.pwf-enabled[data-pwf-panel-style="glass"] [data-pwf-panel="true"]:hover {
+  border-color: color-mix(in srgb, var(--pwf-accent) 48%, var(--pwf-border)) !important;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.13), 0 24px 64px rgba(0, 0, 0, 0.2) !important;
+}
+
+html.pwf-enabled[data-pwf-panel-style="flat"] [data-pwf-panel="true"] {
+  padding-block: 8px !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html.pwf-enabled a:hover {
+  color: var(--pwf-accent) !important;
+}
+
+html.pwf-enabled [data-pwf-panel="true"] > :is(h1, h2, h3, h4, [role="heading"]),
+html.pwf-enabled [data-pwf-panel="true"] :is(h1, h2, h3, h4, [role="heading"]):first-child {
+  color: var(--pwf-accent) !important;
+}
+
+html.pwf-enabled .pwf-sortable {
+  position: relative !important;
+}
+
+html.pwf-enabled.pwf-layout-editing .pwf-drag-handle {
+  position: absolute !important;
+  z-index: 20 !important;
+  top: 10px !important;
+  right: 10px !important;
+  display: grid !important;
+  width: 30px !important;
+  height: 30px !important;
+  place-items: center !important;
+  border: 1px solid var(--pwf-border) !important;
+  border-radius: 9px !important;
+  background: color-mix(in srgb, var(--pwf-surface) 92%, transparent) !important;
+  color: var(--pwf-muted) !important;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1) !important;
+  cursor: grab !important;
+  font: 700 18px/1 system-ui, sans-serif !important;
+  opacity: 0.82;
+  user-select: none;
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+html.pwf-enabled.pwf-layout-editing .pwf-sortable:hover > .pwf-drag-handle,
+html.pwf-enabled.pwf-layout-editing .pwf-drag-handle:focus-visible {
+  opacity: 1;
+}
+
+html.pwf-enabled.pwf-layout-editing .pwf-drag-handle:active {
+  cursor: grabbing !important;
+  transform: scale(0.96);
+}
+
+html.pwf-enabled.pwf-layout-editing .pwf-dragging {
+  opacity: 0.55 !important;
+  outline: 2px dashed var(--pwf-accent) !important;
+  outline-offset: 4px !important;
+}
+
+html:not(.pwf-layout-editing) .pwf-drag-handle {
+  display: none !important;
+}
+
+html.pwf-picking * {
+  cursor: crosshair !important;
+}
+
+html.pwf-picking .pwf-picker-hover {
+  outline: 3px solid #ef4444 !important;
+  outline-offset: 2px !important;
+  background-image: linear-gradient(rgba(239, 68, 68, 0.08), rgba(239, 68, 68, 0.08)) !important;
+}
+
+#pwf-toast {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  right: 18px !important;
+  bottom: 18px !important;
+  max-width: min(360px, calc(100vw - 36px)) !important;
+  padding: 11px 14px !important;
+  border: 1px solid var(--pwf-border) !important;
+  border-radius: 12px !important;
+  background: #171717 !important;
+  color: #fff !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2) !important;
+  font: 500 13px/1.4 system-ui, sans-serif !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.pwf-enabled *,
+  html.pwf-enabled *::before,
+  html.pwf-enabled *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

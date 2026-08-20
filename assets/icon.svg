@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="PW Focus icon">
+  <defs>
+    <linearGradient id="background" x1="16" y1="8" x2="112" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9b8cff"/>
+      <stop offset="1" stop-color="#5b4bc4"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#background)"/>
+  <path d="M34 52V38a4 4 0 0 1 4-4h14M76 34h14a4 4 0 0 1 4 4v14M94 76v14a4 4 0 0 1-4 4H76M52 94H38a4 4 0 0 1-4-4V76" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="64" cy="64" r="12" fill="#fff"/>
+</svg>
