@@ -64,6 +64,25 @@ html.pwf-enabled.pwf-always-expanded [data-pwf-expander="true"] {
   display: none !important;
 }
 
+html.pwf-enabled.pwf-hide-banners [data-pwf-widget="banners"] {
+  display: none !important;
+}
+
+html.pwf-enabled.pwf-hide-recommendations [data-pwf-widget="recommendations"] {
+  display: none !important;
+}
+
+html.pwf-enabled.pwf-dim-locked [data-pwf-locked="true"] {
+  opacity: 0.55 !important;
+  filter: grayscale(30%) !important;
+  transition: opacity 180ms ease, filter 180ms ease !important;
+}
+
+html.pwf-enabled.pwf-dim-locked [data-pwf-locked="true"]:hover {
+  opacity: 0.92 !important;
+  filter: none !important;
+}
+
 html.pwf-enabled [data-pwf-panel="true"] {
   box-sizing: border-box !important;
   position: relative !important;

@@ -3,6 +3,9 @@ const extensionApi = globalThis.browser ?? globalThis.chrome;
 const DEFAULTS = {
   enabled: true,
   alwaysExpanded: true,
+  hideBanners: true,
+  hideRecommendations: true,
+  dimLocked: true,
   contentWidth: "focused",
   panelStyle: "glass",
   panelRadius: 18,
@@ -47,6 +50,9 @@ function normalizeSettings(value = {}) {
   return {
     enabled: typeof value.enabled === "boolean" ? value.enabled : DEFAULTS.enabled,
     alwaysExpanded: typeof value.alwaysExpanded === "boolean" ? value.alwaysExpanded : DEFAULTS.alwaysExpanded,
+    hideBanners: typeof value.hideBanners === "boolean" ? value.hideBanners : DEFAULTS.hideBanners,
+    hideRecommendations: typeof value.hideRecommendations === "boolean" ? value.hideRecommendations : DEFAULTS.hideRecommendations,
+    dimLocked: typeof value.dimLocked === "boolean" ? value.dimLocked : DEFAULTS.dimLocked,
     contentWidth: value.contentWidth === "wide" ? "wide" : "focused",
     panelStyle: value.panelStyle === "flat" ? "flat" : "glass",
     panelRadius: boundedNumber(value.panelRadius, DEFAULTS.panelRadius, 0, 32),

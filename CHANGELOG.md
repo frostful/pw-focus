@@ -2,6 +2,21 @@
 
 All notable changes to PW Focus are documented here.
 
+## [1.1.0] - 2026-08-21
+
+### Added
+
+- Added toggle to hide promotional banners (Star Pass, Saarthi promo carousels).
+- Added toggle to hide recommendation carousels (Trending Among Peers, Batches for You).
+- Added toggle to dim locked/inaccessible offerings with hover restore.
+- Added CSS-module class hints as selector accelerators with fallback to text matching.
+- Added detection patterns for Saarthi, Test Press, UPSC Mentorship, and Connect with Us offerings.
+- Added section patterns for Trending Among Peers and Batches for You.
+
+### Changed
+
+- Improved dashboard and batch item detection resilience across PW frontend builds.
+
 ## [1.0.1] - 2026-08-20
 
 ### Changed
@@ -28,5 +43,6 @@ All notable changes to PW Focus are documented here.
 - Focused appearance controls and emergency page restoration.
 - Privacy, security, licensing, and automated release checks.
 
+[1.1.0]: https://github.com/frostful/pw-focus/releases/tag/v1.1.0
 [1.0.1]: https://github.com/frostful/pw-focus/releases/tag/v1.0.1
 [1.0.0]: https://github.com/frostful/pw-focus/releases/tag/v1.0.0

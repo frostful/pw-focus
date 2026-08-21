@@ -7,6 +7,9 @@
     enabled: true,
     contentWidth: "focused",
     alwaysExpanded: true,
+    hideBanners: true,
+    hideRecommendations: true,
+    dimLocked: true,
     panelStyle: "glass",
     panelRadius: 18,
     accentColor: "#8b7cf6",
@@ -20,7 +23,9 @@
   const SECTION_PATTERNS = new Map([
     ["batch-offerings", /^(batch\s+offerings?|your\s+batches)$/i],
     ["study-zone", /^(my\s+study\s+zone|study\s+zone)$/i],
-    ["upcoming-events", /^upcoming\s+events?(?:\s*\(\d+\))?$/i]
+    ["upcoming-events", /^upcoming\s+events?(?:\s*\(\d+\))?$/i],
+    ["trending-peers", /^trending\s+among\s+(?:your|ur)\s+pe(?:e|a)rs$/i],
+    ["batches-for-you", /^batches\s+for\s+you$/i]
   ]);
 
   const BATCH_ITEM_PATTERNS = new Map([
@@ -32,18 +37,32 @@
     ["pi", /^pi$/i],
     ["preparation-meter", /^preparation\s+meter$/i],
     ["test-pass", /^test\s+pass$/i],
+    ["saarthi", /^saarthi$/i],
     ["khazana", /^khazana$/i],
     ["pitara", /^pitara$/i],
     ["infinite-practice", /^infinite\s+practice$/i],
     ["topper-mentorship", /^topper\s+mentorship/i],
-    ["one-to-one-mentorship", /^1\s*:\s*1\s+mentorship$/i]
+    ["one-to-one-mentorship", /^1\s*:\s*1\s+mentorship$/i],
+    ["test-press", /^test\s+press$/i],
+    ["upsc-mentorship", /^upsc\s+banner\s+mentorship$/i],
+    ["connect-with-us", /^connect\s+with\s+us$/i]
   ]);
+
+  const CLASS_HINTS = {
+    widgetsRoot: "[class*='widgetsSection']",
+    batchContainer: "[class*='batchOfferingContainer']",
+    batchCard: "[class*='experimentCardContainer']",
+    batchLabel: "[class*='experimentLabel']",
+    lockedIcon: "[class*='experimentIconLocked']",
+    lockedBadge: "[class*='experimentLockBadge']"
+  };
 
   const PANEL_HEADING_PATTERNS = [
     /^(batch\s+offerings?|your\s+batches)$/i,
     /^upcoming\s+events?(?:\s*\(\d+\))?$/i,
     /^(my\s+study\s+zone|study\s+zone)$/i,
-    /^trending\s+among\s+(?:your|ur)\s+pe(?:e|a)rs$/i
+    /^trending\s+among\s+(?:your|ur)\s+pe(?:e|a)rs$/i,
+    /^batches\s+for\s+you$/i
   ];
 
   const root = document.documentElement;
@@ -86,6 +105,9 @@
       enabled: typeof value.enabled === "boolean" ? value.enabled : DEFAULTS.enabled,
       contentWidth: value.contentWidth === "wide" ? "wide" : "focused",
       alwaysExpanded: typeof value.alwaysExpanded === "boolean" ? value.alwaysExpanded : DEFAULTS.alwaysExpanded,
+      hideBanners: typeof value.hideBanners === "boolean" ? value.hideBanners : DEFAULTS.hideBanners,
+      hideRecommendations: typeof value.hideRecommendations === "boolean" ? value.hideRecommendations : DEFAULTS.hideRecommendations,
+      dimLocked: typeof value.dimLocked === "boolean" ? value.dimLocked : DEFAULTS.dimLocked,
       panelStyle: value.panelStyle === "flat" ? "flat" : "glass",
       panelRadius: boundedNumber(value.panelRadius, DEFAULTS.panelRadius, 0, 32),
       accentColor: /^#[0-9a-f]{6}$/i.test(value.accentColor || "") ? value.accentColor : DEFAULTS.accentColor,
@@ -315,9 +337,10 @@
     if (!batchHeading) return;
     const section = batchHeading.closest("section,article,[data-pwf-sort-key='batch-offerings']") || batchHeading.parentElement?.parentElement;
     if (!section) return;
+    const searchScope = section.querySelector(CLASS_HINTS.batchContainer) || section;
     const labels = [];
     for (const [key, pattern] of BATCH_ITEM_PATTERNS) {
-      const label = findExactText(pattern, section);
+      const label = findExactText(pattern, searchScope) || findExactText(pattern, section);
       if (label) labels.push([key, label]);
     }
     if (labels.length < 2) return;
@@ -352,6 +375,34 @@
     document.querySelectorAll("[data-pwf-sort-scope]").forEach((node) => delete node.dataset.pwfSortScope);
   }
 
+  function tagDistractions() {
+    document.querySelectorAll("[data-pwf-widget]").forEach((node) => delete node.dataset.pwfWidget);
+    document.querySelectorAll("[data-pwf-locked]").forEach((node) => delete node.dataset.pwfLocked);
+
+    const widgetRoot = document.querySelector(CLASS_HINTS.widgetsRoot);
+    if (widgetRoot) {
+      for (const child of widgetRoot.children) {
+        if (!(child instanceof HTMLElement)) continue;
+        if (child.dataset.pwfSortKey) continue;
+        const heading = child.querySelector("h1,h2,h3,h4,h5,h6,[role='heading']");
+        const headingText = normalizeText(heading?.textContent);
+        if (!headingText || headingText.length > 80) {
+          if (isSafeToHide(child)) child.dataset.pwfWidget = "banners";
+        }
+      }
+    }
+
+    for (const key of ["trending-peers", "batches-for-you"]) {
+      const element = document.querySelector(`[data-pwf-sort-key="${key}"]`);
+      if (element) element.dataset.pwfWidget = "recommendations";
+    }
+
+    document.querySelectorAll(`${CLASS_HINTS.lockedIcon}, ${CLASS_HINTS.lockedBadge}`).forEach((lock) => {
+      const card = lock.closest(`${CLASS_HINTS.batchCard}, [data-pwf-sort-key]`) || lock.closest("div, a, button");
+      if (card && card !== document.body) card.dataset.pwfLocked = "true";
+    });
+  }
+
   function scan() {
     scanQueued = false;
     if (draggedItem) return;
@@ -362,6 +413,7 @@
     decoratePanels();
     prepareDashboardSections();
     prepareBatchItems();
+    tagDistractions();
     lastScanAt = performance.now();
   }
 
@@ -389,9 +441,14 @@
     root.style.setProperty("--pwf-accent", settings.accentColor);
     root.style.setProperty("--pwf-panel-opacity", `${settings.panelOpacity}%`);
     root.classList.toggle("pwf-always-expanded", settings.enabled && settings.alwaysExpanded);
+    root.classList.toggle("pwf-hide-banners", settings.enabled && settings.hideBanners);
+    root.classList.toggle("pwf-hide-recommendations", settings.enabled && settings.hideRecommendations);
+    root.classList.toggle("pwf-dim-locked", settings.enabled && settings.dimLocked);
 
     if (!settings.enabled) {
       document.querySelectorAll("[data-pwf-hidden='true']").forEach((node) => delete node.dataset.pwfHidden);
+      document.querySelectorAll("[data-pwf-widget]").forEach((node) => delete node.dataset.pwfWidget);
+      document.querySelectorAll("[data-pwf-locked]").forEach((node) => delete node.dataset.pwfLocked);
       removeSortingUI();
       return;
     }
